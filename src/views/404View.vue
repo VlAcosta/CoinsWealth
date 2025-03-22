@@ -9,7 +9,16 @@ export default {
   components: {
     Header,
     Footer
-  }
+  },
+  beforeRouteEnter(to, from, next) {
+    // Используем функцию next с колбэком, который будет вызван после загрузки компонента
+    next((vm) => {
+      // Используем метод scrollTo для установки координат прокрутки страницы
+      vm.$nextTick(() => {
+        window.scrollTo(0, 0);
+      });
+    });
+  },
 }
 </script>
 

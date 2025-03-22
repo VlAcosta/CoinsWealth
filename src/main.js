@@ -18,6 +18,9 @@ if (token) {
   Vue.prototype.$http.defaults.headers.common['Authorization'] = token
 }
 
+
+
+
 new Vue({
   render: (h) => h(App),
   router,

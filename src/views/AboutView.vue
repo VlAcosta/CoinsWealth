@@ -11,7 +11,16 @@ export default {
     Header,
     Footer,
     Bar
-  }
+  },
+  beforeRouteEnter(to, from, next) {
+    // Используем функцию next с колбэком, который будет вызван после загрузки компонента
+    next((vm) => {
+      // Используем метод scrollTo для установки координат прокрутки страницы
+      vm.$nextTick(() => {
+        window.scrollTo(0, 0);
+      });
+    });
+  },
 }
 </script>
 
@@ -45,7 +54,7 @@ export default {
                           <div class="medium-white-text">While this may seem like a daunting task, Coinwealth has emerged as a reliable solution for those who want to make money on exchange rate differences.</div>
                       </div>
                       <div class="display-flex-column col-12 col-sm-12 col-md-12 col-lg-11 offset-lg-1">
-                          <div class="mt-3"><button type="button" class="default-btn white-btn btn btn-secondary"><span>Create account</span></button></div>
+                          <div class="mt-3"><button type="button" class="default-btn white-btn btn btn-secondary"><span><router-link class="cl_1" to="/sign-up">Create account</router-link></span></button></div>
                       </div>
                   </div>
               </div>
@@ -55,7 +64,7 @@ export default {
                 <div class="text-small">Let's expand our understanding further</div>
                 <div class="text-big">What is Coinwealth</div>
                 <div class="text-bot">Coinwealth is a company that specializes in foreign currency trading. The company's primary goal is to help its clients make money by investing in various currencies at the right time. With years of experience in the industry, Coinwealth has developed a reputation for being one of the most trusted and reliable companies in the market.</div>
-                <button id="but-reg">Create account</button>
+                <button id="but-reg"><router-link class="cl_1" to="/sign-up">Create account</router-link></button>
               </div>
             </div>
             <div class="block_many block_container block_right">
@@ -63,7 +72,7 @@ export default {
                 <div class="text-small">Experienced professionals</div>
                 <div class="text-big">Your investments are in safe hand</div>
                 <div class="text-bot">Coinwealth is the company that has a team of experienced professionals who have a deep understanding of the foreign exchange market. These experts use their knowledge and expertise to analyze market trends and identify profitable opportunities for their clients. This means that clients can rest assured that their investments are in safe hands.</div>
-                <button id="but-reg">Create account</button>
+                <button id="but-reg"><router-link class="cl_1" to="/sign-up">Create account</router-link></button>
               </div>
           </div>
           <div class="block_feel block_container block_left">
@@ -71,7 +80,7 @@ export default {
                 <div class="text-small">Options for different needs</div>
                 <div class="text-big">Choose a plan that best suits your investment goals</div>
                 <div class="text-bot">Coinwealth offers a range of investment options to suit different needs and budgets. Whether you are a seasoned investor or a beginner, Coinwealth has something to offer you. The company's investment plans are designed to be flexible and customizable, so clients can choose a plan that best suits their investment goals.</div>
-                <button id="but-reg">Create account</button>
+                <button id="but-reg"><router-link class="cl_1" to="/sign-up">Create account</router-link></button>
               </div>
             </div>
             <div class="block_many block_container block_right">
@@ -79,7 +88,7 @@ export default {
                 <div class="text-small">Make informed investment decisions</div>
                 <div class="text-big">Learn more about the foreign exchange market</div>
                 <div class="text-bot">In addition to its investment services, Coinwealth also offers educational resources to help clients learn more about the foreign exchange market. The company's website features a range of articles, videos, and tutorials that cover everything from the basics of foreign currency trading to advanced trading strategies. This makes it easier for clients to make informed investment decisions and maximize their returns.</div>
-                <button id="but-reg">Create account</button>
+                <button id="but-reg"><router-link class="cl_1" to="/sign-up">Create account</router-link></button>
               </div>
           </div>
           <Bar/>
@@ -96,6 +105,11 @@ export default {
   max-width: 100vw;
 }
 
+.cl_1{
+  text-decoration: none;
+  color: black;
+}
+
 .main_str{
   max-width: 100vw;
   min-height: 100vh;
@@ -106,7 +120,7 @@ export default {
 }
 
 #block_1{
-  max-width: 1300px;
+  max-width: 1100px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -252,6 +266,7 @@ export default {
     -webkit-box-direction: normal;
     -ms-flex-direction: column;
     flex-direction: column;
+    margin-right: 10px;
     width: 100%;
     -webkit-box-pack: center;
     -ms-flex-pack: center;

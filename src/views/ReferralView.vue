@@ -9,7 +9,16 @@ export default {
   components: {
     Header,
     Footer
-  }
+  },
+  beforeRouteEnter(to, from, next) {
+    // Используем функцию next с колбэком, который будет вызван после загрузки компонента
+    next((vm) => {
+      // Используем метод scrollTo для установки координат прокрутки страницы
+      vm.$nextTick(() => {
+        window.scrollTo(0, 0);
+      });
+    });
+  },
 }
 </script>
 
@@ -41,24 +50,20 @@ export default {
               <div class="info-container">
                 <div class="want-to-get-more">Want to get more rewards?</div>
                 <div class="invite-your-friends">Invite your Friends</div>
-                <div class="mine-with-text">to mine with Wwalth Coin and</div>
-                <div class="big-green-text">Receive up to 30%</div>
+                <div class="mine-with-text">to mine with Wealth Coin and</div>
+                <div class="big-green-text">Receive up to 10%</div>
                 <div class="big-green-text">in rewards</div>
                 <div class="small-grey-text-bottom">Share your unique link with friends and earn more rewards while they are playing</div>
               </div>
             </div>
             <div class="referral-program-sub-header-block-text">Here's how it works</div>
-            <div class="referral-program-grey-text"><p>Once a user clicks on your referral link and successfully creates an account, their account is automatically linked to yours. You can earn commissions for actions they take on our website, such as making purchases at in-game market or buying LMT. Commissions are calculated and added to your balance automatically, and the more players you refer, the more money you can earn each month.</p><p>Spread the word about our mining service simulator by sharing your referral link with friends, family, and colleagues. You can send it via email, post it on social media, or simply share it in person. As your referred customers engage in mining activities and meet specific criteria, you'll earn rewards!</p>
-              <p>Get up to <span class="white-text">30%</span> in rewards! Receive <span class="white-text">20%</span> commission in LMT, when your referrals make purchases in the in-game market and <span class="white-text">10%</span> commission in cryptocurrencies (BTC), when your referrals spent cryptocurrencies to buy LMT!</p>
+            <div class="referral-program-grey-text"><p>Once a user clicks on your referral link and successfully creates an account, their account is automatically linked to yours. You can earn commissions for actions they take on our website, such as Buying investment package. Commissions are calculated and added to your balance automatically, and the more investors you refer, the more money you can earn each month.</p><p>Spread the word about our investing packages by sharing your referral link with friends, family, and colleagues. You can send it via email, post it on social media, or simply share it in person. As your referred customers engage in our packages and meet specific criteria, you'll earn rewards!</p>
+              <p>Get up to <span class="white-text">10%</span> in rewards! Receive 10% commission , when your referrals make investment first deposit you will earn 10% commission in cryptocurrencies (USDT), when your referrals make the first deposit and activate a package!</p>
             </div>
             <div class="referral-program-sub-header-block-text">Commission level:</div>
             <div class="referral-program-info-row">
-              <div class="referral-program-block-with-value">20%</div>
-              <div>in LMT, when your referrals make purchases in the in-game market</div>
-            </div>
-            <div class="referral-program-info-row">
               <div class="referral-program-block-with-value">10%</div>
-              <div>in cryptocurrencies (BTC), when your referrals spent cryptocurrencies to buy LMT</div>
+              <div>in cryptocurrencies (USDT), when your referrals bought investment package</div>
             </div>
           </div>
         </div>

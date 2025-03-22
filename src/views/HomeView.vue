@@ -6,6 +6,15 @@ import Bar from '@/components/Bar.vue'
 
 
 export default {
+beforeRouteEnter(to, from, next) {
+    // Используем функцию next с колбэком, который будет вызван после загрузки компонента
+    next((vm) => {
+      // Используем метод scrollTo для установки координат прокрутки страницы
+      vm.$nextTick(() => {
+        window.scrollTo(0, 0);
+      });
+    });
+  },
   name: 'HomeView',
   components: {
     Header,
@@ -13,6 +22,7 @@ export default {
     Bar
   }
 }
+
 </script>
 
 <template>
@@ -35,14 +45,14 @@ export default {
         <div class="block_create2">
           <div class="block_create1">
             <div class="text-small">Investment for everyone</div>
-            <div class="text-big">Invest in <br>stocks and ETFs</div>
-            <div class="text-bot">Coinwealth is a company that makes money on exchange rate differences and helps others make money from it </div>
+            <div class="text-big">Make money on exchange<br> rate differences</div>
+            <div class="text-bot">Coinwealth is a company that specializes in foreign currency trading. The company's primary goal is to help its clients make money by investing in various currencies at the right time</div>
           
           </div>
           <div class="block_create_list">
             <div class="create_listitem">
               <img src="../assets/blue_point.svg" class="list_dot">
-              <div class="create_listitem_text">Choose your package for a convenient number of months</div>
+              <div class="create_listitem_text">Choose your plan for a convenient number of months</div>
             </div>
             <div class="create_listitem">
               <img src="../assets/blue_point.svg" class="list_dot">
@@ -50,7 +60,11 @@ export default {
             </div>
             <div class="create_listitem">
               <img src="../assets/blue_point.svg" class="list_dot">
-              <div class="create_listitem_text">Withdraw your profit from $50. Invite friends and earn money</div>
+              <div class="create_listitem_text">Withdraw your profit from $50.</div>
+            </div>
+            <div class="create_listitem">
+              <img src="../assets/blue_point.svg" class="list_dot">
+              <div class="create_listitem_text">Invite friends and earn money</div>
             </div>
           </div>
         </div>
@@ -62,8 +76,8 @@ export default {
           <div id="grad-p"></div>
           <div class="text-small">Fast and easy</div>
           <div class="text-big">Open an account</div>
-          <div class="text-bot">Within 10 mins top up your new account by card or via bank transfer<br> - free of charge.</div>
-          <router-link class='cr_rl' to="/sign-up"><button id="but-reg">Create account</button></router-link>
+          <div class="text-bot">Within 10 mins top up your new account by transfer USDT to your wallet - free of charge.</div>
+          <router-link  class='cr_rl' to="/sign-up"><button id="but-reg">Create account</button></router-link>
         </div>
         <div class="img_container">
           <img src="../assets/open_an_account.png" class="block_image">
@@ -74,7 +88,7 @@ export default {
           <div class="text-small">Earn with us</div>
           <div class="text-big">Choose your plan</div>
           <div class="text-bot">There are four plans to choose from with different percentages and times. <br> Choose the one that suits you best.</div>
-          <router-link class='cr_rl' to="/sign-up"><button id="but-reg">Create account</button></router-link>
+          <router-link @click.native="$scrollToTop" class='cr_rl' to="/sign-up"><button id="but-reg">Create account</button></router-link>
         </div>
         <div class="img_container">
           <img src="../assets/choose_your_plan.png" class="block_image">
@@ -86,7 +100,7 @@ export default {
           <div class="text-small">Feel the benefit</div>
           <div class="text-big">Withdraw your <br>profit</div>
           <div class="text-bot">As soon as the profit of your package reaches $50,<br> you can immediately withdraw it to your wallet.</div>
-          <router-link class='cr_rl' to="/sign-up"><button id="but-reg">Create account</button></router-link>
+          <router-link @click.native="$scrollToTop" class='cr_rl' to="/sign-up"><button id="but-reg">Create account</button></router-link>
         </div>
         <div class="img_container">
           <img src="../assets/withdraw_your_profit.png" class="block_image">
@@ -122,7 +136,9 @@ export default {
           <img src="../assets/become_an_affilate.png" class="block_image">
         </div>
       </div>
-      <Bar />
+      <div class="bar">
+        <Bar />
+      </div>
     </div>
     <Footer/>
   </div>
@@ -137,8 +153,13 @@ export default {
   max-width: 100vw;
 }
 
+.bar{
+  margin: 0px 45px
+}
+
 .cr_rl{
   text-decoration: none;
+  color: white
 }
 
 .main_str{

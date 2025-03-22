@@ -9,7 +9,16 @@ export default {
   components: {
     Header,
     Footer
-  }
+  },
+  beforeRouteEnter(to, from, next) {
+    // Используем функцию next с колбэком, который будет вызван после загрузки компонента
+    next((vm) => {
+      // Используем метод scrollTo для установки координат прокрутки страницы
+      vm.$nextTick(() => {
+        window.scrollTo(0, 0);
+      });
+    });
+  },
 }
 </script>
 
@@ -140,14 +149,14 @@ export default {
     flex-wrap: wrap;
     justify-content: center;
     flex-direction: row;
-    margin: 0 15.33333%;
+    justify-items: center;
 }
 
 .osn_block{
     display: flex;
     flex-direction: column;
     justify-content: center;
-    max-width: 1540px;
+    max-width: 1100px;
 }
 
 .page-hr{

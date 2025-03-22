@@ -11,6 +11,7 @@
                             <div><img src="../assets/right_arrow.svg" alt="arrow" width="16" height="16"></div>
                         </div>
                         <div class="general-text">It is very easy. Don’t waste any moment</div>
+                        <span></span>
                     </div>
                </router-link>
             </div>
@@ -21,7 +22,7 @@
                             <div class="heading-text mr-2">FAQ</div>
                             <div><img src="../assets/right_arrow.svg" alt="arrow" width="16" height="16"></div>
                         </div>
-                        <div class="general-text">Still have questions? Also, don’t forget to visit our <span class="about-us-text">About Us</span> page</div>
+                         <div class="general-text">Still have questions? Also, don’t forget to visit our <br><span class="about-us-text">About Us</span> page</div>
                     </div>
                 </router-link> 
             </div>
@@ -42,6 +43,8 @@
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@100;200;300;400;500;600;700;800;900&family=Poppins&display=swap');
 
 
+
+
 .small-grey-text {
     color: #aeb1c5;
     font-family: 'Poppins', sans-serif;
@@ -57,21 +60,20 @@
     line-height: 67px;
 }
 
+
 .enter-universe-wrapper {
-    height: 100%;
-    position: relative;
-    display: flex;
-    -webkit-box-orient: vertical;
-    -webkit-box-direction: normal;
-    -ms-flex-direction: column;
-    flex-direction: column;
-    padding: 120px 16px 24px;
-    -webkit-box-align: start;
-    -ms-flex-align: start;
-    align-items: flex-start;
-    grid-gap: 8px;
-    gap: 8px;
-    background: #222432;
+  min-width: 230px;
+  height: 100%;
+  position: relative;
+  display: flex;
+  flex: 1 0 30%;
+  padding: 80px 30px 50px 30px;
+  flex-direction: column;
+  align-items: flex-start;
+  grid-gap: 8px;
+  gap: 8px;
+  background: #222432;
+  box-sizing: border-box;
 }
 
 .col-sm-6{
@@ -126,16 +128,49 @@
     width: 100%;
     color: #aeb1c5;
     font-family: 'Poppins', sans-serif;
-    font-size: 14px;
-    line-height: 20px;
+    font-size: 12px;
+    line-height: 16px;
 }
 .email-text-link {
     color: #b9f700;
     cursor: pointer;
 }
 
+.col-lg-4{
+    width: 30%;
+}
 
 .menu-item{
     text-decoration: none;
+}
+
+
+.row{
+    display: flex;
+    flex-wrap: wrap;
+}
+
+@media screen and (max-width: 768px) {
+ .enter-universe-wrapper {
+    width: 100%;
+    margin-right: 0;
+  }   
+}
+
+@media screen and (max-width: 500px) {
+    .row{
+        display: flex;
+        flex-direction: column;
+    }
+    .enter-universe-wrapper{
+        padding: 25px 100px;
+    }
+    .heading-block{
+        margin-left: -80px;
+    }
+    .general-text{
+        margin-left: -80px;
+        width: 150px;
+    }
 }
 </style>

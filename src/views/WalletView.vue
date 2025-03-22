@@ -51,22 +51,19 @@ export default {
         this.deposit_countErrorMsg = 'The deposit must be greater than 1 USD and be an integer'
       } else this.deposit_countError = false
     },
-    createDeposit() {
-
+    createWithdraw() {
       let data = {
         count: this.deposit_count,
         token: this.$store.state.token,
-        userid: this.$store.state.user.id
+        userid: this.$store.state.user.id,
+        mail: this.withdraw_email,
       }
-      this.$store.dispatch('create_deposit', data)
+      this.$store.dispatch('create_withdraw', data)
       .then(resp => {
         
         switch (resp.data.status) {
           case "success":
           {
-            let url = resp.data.depositUrl
-            window.open(url, '_blank').focus()
-            console.log(url);
             break;
           }
           case "token_expired":
@@ -77,24 +74,19 @@ export default {
         }
       })
     },
-    createWithdraw() {
-
+    create_approval() {
+      console.log(this.deposit_count)
       let data = {
         count: this.deposit_count,
         token: this.$store.state.token,
         userid: this.$store.state.user.id,
-        mail: this.withdraw_email,
-        count: this.deposit_count
       }
-      this.$store.dispatch('create_withdraw', data)
+      this.$store.dispatch('create_approval', data)
       .then(resp => {
         
         switch (resp.data.status) {
           case "success":
           {
-            let url = resp.data.depositUrl
-            window.open(url, '_blank').focus()
-            console.log(url);
             break;
           }
           case "token_expired":
@@ -155,7 +147,7 @@ export default {
           <div class="send_only_btc_block">
             <img src="../assets/wallet_tip_icon.svg" alt="" srcset="">
             <div class="send_only_btc_text">
-              Send only <span class="bold">USDT</span> to this deposit address in <span class="bold">Bitcoin Network</span>
+              <span>Enter the deposit amount to continue</span>
             </div>
           </div>
           <div class="deposit_adress_block">
@@ -166,7 +158,7 @@ export default {
             </div>
             <label for="deposit_count" class="input_error_text" v-if="this.deposit_countError">{{ this.deposit_countErrorMsg }}</label>
           </div>
-          <button class="default-btn" v-on:click="createDeposit()" :disabled="this.deposit_countError">Deposit</button>
+          <router-link to="/wallet/deposit/qr" class="page_selector_item" :class="this.pageselected == 'qr' ? 'active' : ''" @click.native="openAnotherPage('qr');"><button class="default-btn">Deposit</button></router-link>
         </div>
         <div class="page_block" v-show="this.pageselected == 'withdraw'">
           <div class="total_balance_block">
@@ -207,7 +199,7 @@ export default {
             Processing of withdraw request may take up to 5 business days
           </div>
           <div class="withdraw_btn_container">
-            <button id="withdraw_btn" class="default-btn">Withdraw</button>
+            <button id="withdraw_btn" class="default-btn" @click="createWithdraw()">Withdraw</button>
           </div>
         </div>
         <div class="page_block" v-show="this.pageselected == 'history'">
@@ -224,6 +216,14 @@ export default {
               There are no transactions yet.
             </div>
           </div>
+        </div>
+        <div class="page_block" v-show="this.pageselected == 'qr'" style="display: flex; align-items: center; flex-direction: column;">
+          <div class="text-transition">Transfer the exact amount using one of the QR codes: {{ deposit_count }} USDT</div>
+          <div class="image-qr-block">
+            <img class="img-qr" src="../assets/usdt ton.jpeg" alt="">
+            <img class="img-qr" src="../assets/usdt eth.jpeg" alt="">
+          </div>
+          <router-link to="/wallet/deposit" @click.native="openAnotherPage('deposit')"><button class="button-trans default-btn" @click="create_approval()" >I translated it</button></router-link>
         </div>
       </div>
     </div>
@@ -244,6 +244,7 @@ export default {
 body{
   height: 10000px;
 }
+
 
 
 .input_error{
@@ -655,6 +656,31 @@ input[type=checkbox]:checked{
   color: #aeb1c5;
 }
 
+.text-transition {
+  text-align: center;
+  font-size: 32px;
+  color: #f8f8f8;
+  height: 72px;
+  padding: 25px 20px;
+  margin-left: 25px;
+  border: none;
+  width: 90%;
+  outline: 0;
+}
+
+.image-qr-block{
+  display: flex;
+  flex-direction: row;
+}
+
+.image-qr-block > .img-qr {
+  width: 530px;
+  margin: 20px;
+}
+
+.button-trans{
+align-items:center
+}
 
 @media screen and (max-width: 1200px) {
   #block_1{

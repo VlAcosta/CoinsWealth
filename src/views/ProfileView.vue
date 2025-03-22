@@ -34,6 +34,10 @@ export default {
       
       change_password_save_enabled: false,
 
+      passCurrent_visible: false,
+      passNew_visible: false,
+      passConfirm_visible: false,
+
       changepass_current: '',
       changepass_current_error: false,
       changepass_current_errormsg: '',
@@ -53,7 +57,23 @@ export default {
       selectedAvatar: 0,
 
       width: document.documentElement.clientWidth,
-      height: document.documentElement.clientHeight
+      height: document.documentElement.clientHeight,
+      packages_list: [],
+      packages_history: [],
+      months_list: [
+        'Jan',
+        'Feb',
+        'Mar',
+        'Apr',
+        'May',
+        'Jun',
+        'Jul',
+        'Aug',
+        'Sep',
+        'Oct',
+        'Nov',
+        'Dec'
+      ]
     };
   },
   methods: {
@@ -124,7 +144,7 @@ export default {
           break;
         }
         case "new": {
-          if (!/*this.changepass_new.match(passwordRegex)*/ false) {
+          if (/*!this.changepass_new.match(passwordRegex)*/ false) {
             this.changepass_new_error = true;
             this.changepass_new_errormsg = 'Password contains forbidden symbols.'
           } else if (this.changepass_new.length < 8) {
@@ -267,6 +287,38 @@ export default {
       })
        .catch(err => console.log(err))
     },
+    load_packages() {
+      let data = {
+        token: this.$store.state.token,
+        userid: this.$store.state.user.id
+      }
+
+      this.$store.dispatch('load_wallet_packages', data)
+      .then(async (resp) => {
+        
+        switch (resp.data.status) {
+          case "success":
+          {
+            this.packages_list = resp.data.packages_list
+            this.packages_history = resp.data.packages_history
+            break;
+          }
+          case "token_expired":
+          {
+            //this.$router.go()
+            alert('Sign in to continue')
+          }
+        }
+      })
+    },
+    getTimeStr(time) {
+      var date = new Date(time * 1000);
+
+      let month = this.months_list[date.getUTCMonth()];
+      let day = date.getUTCDate();
+      let year = date.getUTCFullYear();
+      return day + ' ' + month + ' ' + year
+    },
     selectAvatar(num) {
       this.selectedAvatar = num
     },
@@ -296,6 +348,25 @@ export default {
         }
       })
        .catch(err => console.log(err))
+    },
+    changePassState(num) {
+      switch (num) {
+        case 0:
+        {
+          this.passCurrent_visible = !this.passCurrent_visible;
+          break;
+        }
+        case 1:
+        {
+          this.passNew_visible = !this.passNew_visible;
+          break;
+        }
+        case 2:
+        {
+          this.passConfirm_visible = !this.passConfirm_visible;
+          break;
+        }
+      }
     }
   },
   created() {
@@ -319,6 +390,18 @@ export default {
 
     window.removeEventListener("scroll", this.preventMotion, false);
     window.removeEventListener("touchmove", this.preventMotion, false);
+  },
+  beforeRouteEnter(to, from, next) {
+    // Используем функцию next с колбэком, который будет вызван после загрузки компонента
+    next((vm) => {
+      // Используем метод scrollTo для установки координат прокрутки страницы
+      vm.$nextTick(() => {
+        window.scrollTo(0, 0);
+      });
+    });
+  },
+  beforeMount() {
+    this.load_packages()
   }
 }
 </script>
@@ -331,25 +414,28 @@ export default {
         <div class="fix_container_name">Change Password</div>
         <div class="fix_input_container">
           <label for="current_password">Current Password</label>
-          <input type="password" name="" id="current_password" :class="this.changepass_current_error ? 'input_error_border' : ''" placeholder="Pa$sw0rd" v-model="changepass_current" @input="changePassText('current')">
+          <input :type="passCurrent_visible ? 'text' : 'password'" name="" id="current_password" :class="this.changepass_current_error ? 'input_error_border' : ''" placeholder="Pa$sw0rd" v-model="changepass_current" @input="changePassText('current')">
           <div class="password-lock-icon">
-            <img src="../assets/grey_lock_locked.svg" alt="show_w">
+            <img v-if="passCurrent_visible" src="../assets/grey_lock_unlocked.svg" @click="changePassState(0)" alt="show_w">
+            <img v-else src="../assets/grey_lock_locked.svg" @click="changePassState(0)" alt="show_w" />
           </div>
           <label for="current_password" class="invalid_field" v-if="this.changepass_current_error"> {{ this.changepass_current_errormsg }}</label>
         </div>
         <div class="fix_input_container">
           <label for="new_password">New Password</label>
-          <input type="password" name="" id="new_password" :class="this.changepass_new_error ? 'input_error_border' : ''" placeholder="Pa$sw0rd" v-model="changepass_new" @input="changePassText('new')">
+          <input :type="passNew_visible ? 'text' : 'password'" name="" id="new_password" :class="this.changepass_new_error ? 'input_error_border' : ''" placeholder="Pa$sw0rd" v-model="changepass_new" @input="changePassText('new')">
           <div class="password-lock-icon">
-            <img src="../assets/grey_lock_locked.svg" alt="show_w">
+            <img v-if="passNew_visible" src="../assets/grey_lock_unlocked.svg" @click="changePassState(1)" alt="show_w">
+            <img v-else src="../assets/grey_lock_locked.svg" @click="changePassState(1)" alt="show_w" />
           </div>
           <label for="new_password" class="invalid_field" v-if="this.changepass_new_error"> {{ this.changepass_new_errormsg }}</label>
         </div>
         <div class="fix_input_container">
           <label for="confirm_new_password">Confirm New Password</label>
-          <input type="password" name="" id="confirm_new_password" :class="this.changepass_confirm_error ? 'input_error_border' : ''" placeholder="Pa$sw0rd" v-model="changepass_confirm" @input="changePassText('confirm')">
+          <input :type="passConfirm_visible ? 'text' : 'password'" name="" id="confirm_new_password" :class="this.changepass_confirm_error ? 'input_error_border' : ''" placeholder="Pa$sw0rd" v-model="changepass_confirm" @input="changePassText('confirm')">
           <div class="password-lock-icon">
-            <img src="../assets/grey_lock_locked.svg" alt="show_w">
+            <img v-if="passConfirm_visible" src="../assets/grey_lock_unlocked.svg" @click="changePassState(2)" alt="show_w">
+            <img v-else src="../assets/grey_lock_locked.svg" @click="changePassState(2)" alt="show_w" />
           </div>
           <label for="confirm_new_password" class="invalid_field" v-if="this.changepass_confirm_error"> {{ this.changepass_confirm_errormsg }}</label>
         </div>
@@ -488,7 +574,8 @@ export default {
         </div>
         <div class="page_name_info"></div>
         <div id='infoTooltip' class="game-header-tooltip">
-          <img src="../assets/info_in_square.svg" alt="info" height="24px" width="24px">
+          <img src="../assets/info_in_square.svg" alt="info" height="24px" width="24px">             
+          <span id="tooltip">Manage your account information. Update your avatar, username, and change password while gaining insight into essential account statistics. Take control and customize your experience with ease.</span>
         </div>
       </div>
       <div class="page_container">
@@ -569,50 +656,92 @@ export default {
           </div>
         </div>
         <div class="right_menu" v-show="pageselected && !this.pagedefault">
-          <div class="block_income">
-            <div class="income_header">INCOME</div>
-            <div class="income_row mb-2">
-              <div class="income_cell1"></div>
-              <div class="income_cell2">
-                USDT
-              </div>
-            </div>
-            <div class="income_row">
-              <div class="income_cell1">
-                <div class="grey-row-text2">Investing</div>
-              </div>
-              <div class="income_cell2">
-                <p>
-                  <div>0</div>
-                </p>
-                <div class="grey-row-text">USDT</div>
-              </div>
-            </div>
-            <div class="delimiter_light"></div>
-            <div class="income_row">
-              <div class="income_cell1">
-                <div class="grey-row-text2">Refferals</div>
-              </div>
-              <div class="income_cell2">
-                <p>
-                  <div>0</div>
-                </p>
-                <div class="grey-row-text">BTC</div>
-              </div>
-            </div>
-            <div class="delimiter-bold"></div>
-            <div class="income_row">
-              <div class="income_cell1">
-                <div class="green-total-text">TOTAL</div>
-              </div>
-              <div class="income_cell2">
-                <p>
-                  <div>0</div>
-                </p>
-                <div class="grey-row-text">BTC</div>
+          <div class="packages_main_container">
+            <div class="package_list_header">ACTIVE PACKAGES</div>
+            <div class="packages_active_container">
+              <div class="package_block" v-for="item in packages_list" v-bind:key="item.id">
+                <div class="package_item">
+                  <span class="package_item_header">Name: </span>
+                  <span class="package_item_text">{{ item.name }}</span>
+                </div>
+                <div class="package_item">
+                  <span class="package_item_header">Duration: </span>
+                  <span class="package_item_text">{{ item.duration }} days</span>
+                </div>
+                <div class="package_item">
+                  <span class="package_item_header">Investment: </span>
+                  <span class="package_item_text">{{ item.count }} USDT</span>
+                </div>
+                <div class="package_item">
+                  <span class="package_item_header">Profit: </span>
+                  <span class="package_item_text">{{ Math.round(item.count*((Number(item.percent))/100)) }} USDT</span>
+                </div>
+                <div class="package_item">
+                  <span class="package_item_header">Date of purchase: </span>
+                  <span class="package_item_text">{{ getTimeStr(item.time) }}</span>
+                </div>
+                <div class="package_item">
+                  <span class="package_item_header">Percent: </span>
+                  <span class="package_item_text">{{ item.percent }}%</span>
+                </div>
+                <div class="package_item">
+                  <span class="package_item_header">Payment date: </span>
+                  <span class="package_item_text">{{ getTimeStr(Number(item.time)+(Number(item.duration)*24*60*60)) }}</span>
+                </div>
+                <div class="package_item">
+                  <span class="package_item_header">Auto Sub: </span>
+                  <span class="package_item_text">{{ Number(item.autosub) == 1 ? 'Enabled' : 'Disabled' }}</span>
+                </div>
+                <div class="package_item" style="margin-top: 10px; display: flex; flex-wrap: nowrap; align-items: center; width: 100%;">
+                  <div class="package_item_header">Progress bar:</div>
+                  <span class="package_item_text" style="margin-left: 8px;">{{ Math.round((100*(Math.floor(Date.now()/1000) - Number(item.time)))/(Number(item.duration)*24*60*60)) }}%</span>
+                  <div class="package_item_progress_container">
+                    <div class="package_item_progress_line" :style="{width: `${Math.round((100*(Math.floor(Date.now()/1000) - Number(item.time)))/(Number(item.duration)*24*60*60))}%`}"></div>
+                  </div>
+                </div>
+                <button class="autosub" v-if="false">{{ Number(item.autosub) == 1 ? 'Disable Auto Subscription' : 'Enable Auto Subscription' }}</button>
               </div>
             </div>
           </div>
+          <div class="packages_main_container">
+            <div class="package_list_header">HISTORY PACKAGES</div>
+            <div class="packages_active_container">
+              <div class="package_block" v-for="item in packages_history" v-bind:key="item.id">
+                <div class="package_item">
+                  <span class="package_item_header">Name: </span>
+                  <span class="package_item_text">{{ item.name }}</span>
+                </div>
+                <div class="package_item">
+                  <span class="package_item_header">Duration: </span>
+                  <span class="package_item_text">{{ item.duration }} days</span>
+                </div>
+                <div class="package_item">
+                  <span class="package_item_header">Investment: </span>
+                  <span class="package_item_text">{{ item.count }} USDT</span>
+                </div>
+                <div class="package_item">
+                  <span class="package_item_header">Profit: </span>
+                  <span class="package_item_text">{{ Math.round(item.count*((Number(item.percent))/100)) }} USDT</span>
+                </div>
+                <div class="package_item">
+                  <span class="package_item_header">Date of purchase: </span>
+                  <span class="package_item_text">{{ getTimeStr(item.time) }}</span>
+                </div>
+                <div class="package_item">
+                  <span class="package_item_header">Percent: </span>
+                  <span class="package_item_text">{{ item.percent }}%</span>
+                </div>
+                <div class="package_item">
+                  <span class="package_item_header">Payment date: </span>
+                  <span class="package_item_text">{{ getTimeStr(Number(item.time)+(Number(item.duration)*24*60*60)) }}</span>
+                </div>
+                <div class="package_item">
+                  <span class="package_item_header">Auto Sub: </span>
+                  <span class="package_item_text">{{ Number(item.autosub) == 1 ? 'Enabled' : 'Disabled' }}</span>
+                </div>
+              </div>
+            </div>
+        </div>
         </div>
       </div>
     </div>
@@ -636,6 +765,24 @@ body{
 
 .disable_scroll {
   overflow: hidden;
+}
+
+#tooltip  {
+  display: none;
+  position: absolute;
+  justify-content: space-between;
+  max-width: 250px;
+  padding: 6px 10px;
+  font-size: 12px;
+  background: #373843;
+  color: #FFFFFF;
+  opacity: 0.9;
+  margin-left: -105px;
+  margin-top: 10px;
+}
+
+#infoTooltip:hover #tooltip{
+  display: block;
 }
 
 .fix_container{
@@ -952,7 +1099,7 @@ body{
 
 .right_menu{
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
   margin-left: 16px;
@@ -1186,6 +1333,86 @@ a .account_info_data{
   font-size: 16px;
   text-transform: uppercase;
   color: #a2d800;
+}
+
+.packages_main_container {
+  margin-top: 30px;
+  width: 100%;
+}
+
+.package_list_header {
+  background: hsla(0,0%,100%,.03);
+  width: 100%;
+  padding: 15px 16px;
+  margin-bottom: 20px;
+
+  border-radius: 4px;
+  font-family: 'Poppins';
+  font-size: 17px;
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.packages_active_container {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+}
+
+.package_block {
+  padding: 15px 22px;
+  background: hsla(0,0%,100%,.03);
+  border-radius: 4px;
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.package_item {
+  min-width: 35%;
+  font-family: 'Poppins';
+  font-size: 15px;
+  color: #ffffff;
+  margin-bottom: 8px;
+}
+
+.package_item_header {
+  font-weight: 500;
+}
+
+.package_item_text {
+  font-weight: 400;
+}
+
+.package_item_progress_container {
+  margin-left: 15px;
+  width: 62%;
+  height: 17px;
+  background: #0c0e1b;
+  border-radius: 2px;
+}
+
+.package_item_progress_line {
+  background: #b9f700;
+  height: 100%;
+}
+
+button.autosub {
+  border: none;
+  background: #222432;
+  color: white;
+  font-family: 'Poppins';
+  font-size: 15px;
+  padding: 5px 10px;
+  margin-top: 10px;
+}
+
+button.autosub:hover {
+  background: #292a3a;
+  transition: all .5s;
 }
 
 @media screen and (max-width: 1200px) {

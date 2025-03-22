@@ -9,12 +9,21 @@ export default {
   components: {
     Header,
     Footer
-  }
+  },
+  beforeRouteEnter(to, from, next) {
+    // Используем функцию next с колбэком, который будет вызван после загрузки компонента
+    next((vm) => {
+      // Используем метод scrollTo для установки координат прокрутки страницы
+      vm.$nextTick(() => {
+        window.scrollTo(0, 0);
+      });
+    });
+  },
 }
 </script>
 
 <template>
-<div class="container">
+<div class="container-pri">
     <Header/>
     <div class="container2">
         <div class="privacy-page-container row">
@@ -57,7 +66,7 @@ export default {
             <div class="privacy-content-container col-12 col-lg-8">
                 <div id="general" class="privacy-info-block">
                     <p>Protecting our customers' privacy is of utmost importance to us.</p>
-                    <p>This Privacy Policy outlines the collection and processing of your personal information when you interact with our website (https://limercoin.com/) and other websites that we own and operate (collectively referred to as "website").</p>
+                    <p>This Privacy Policy outlines the collection and processing of your personal information when you interact with our website (https://coinwealth.group/) and other websites that we own and operate (collectively referred to as "website").</p>
                     <p>It is applicable to all activities involving the processing of personal information conducted by us. Even if you are not directly using our services but are accessing our website, this Privacy Policy also applies to you.</p>
                     <p>Please note that our website may contain links to third-party sites and services. It's important to be aware that those sites and services have their own privacy policies. Once you click on a link to access third-party content, we recommend reviewing their privacy policy to understand how they collect and utilize personal information. Our Privacy Policy does not extend to any activities that occur after you leave our site.</p>
                     <p>Last updated: July 1, 2023.</p>
@@ -180,7 +189,7 @@ export default {
                             <li>An entity that acquires or merges with our company, or to which we transfer all or substantially all of our assets and business.</li>
                         </ul>
                         <p>Please note that we currently utilize Google Analytics as one of our third-party service providers, but this list is not exhaustive.</p>
-                        <p>Additionally, we may make certain data related to your Limercoin account publicly available. This may include leaderboard information, your online username or game ID, your mining power capacity, the number of games played, and the number of miners and racks. By accessing Limercoin, you provide your consent to the publication of this data on the publicly available leaderboard and on publicly available profile page on Limercoin website.</p>
+                        <p>Additionally, we may make certain data related to your coinwealth account publicly available. This may include leaderboard information, your online username or game ID, your mining power capacity, the number of games played, and the number of miners and racks. By accessing coinwealth, you provide your consent to the publication of this data on the publicly available leaderboard and on publicly available profile page on coinwealth website.</p>
                     </div>
                 </div>
                 <div class="privacy-info-block">
@@ -235,7 +244,7 @@ export default {
                     <div id="dataController" class="header-text-block">Data Controller / Data Processor</div>
                     <div>
                         <p>Under the General Data Protection Regulation (GDPR), organizations are classified as either "data controllers" or "data processors." Data controllers are organizations that process personal information for their own purposes, while data processors are organizations that process personal information on behalf of others.</p>
-                        <p>LIMERCOIN acts as both a data controller and a data processor in relation to the personal information you provide to us. This means that we may process your personal information for our own purposes as well as on behalf of other organizations, as required. We are committed to ensuring that all processing of personal information is conducted in compliance with the GDPR and other applicable data protection laws.</p>
+                        <p>coinwealth acts as both a data controller and a data processor in relation to the personal information you provide to us. This means that we may process your personal information for our own purposes as well as on behalf of other organizations, as required. We are committed to ensuring that all processing of personal information is conducted in compliance with the GDPR and other applicable data protection laws.</p>
                     </div>
                 </div>
                 <div class="privacy-info-block">
@@ -297,7 +306,7 @@ export default {
                     <div id="contactUs" class="header-text-block">Contact Us</div>
                     <div>
                         <p>If you have any questions or concerns about your privacy or the handling of your personal information, please feel free to contact us using the following details:</p>
-                        <p><a href="mailto: support@limercoin.com">support@limercoin.com</a></p>
+                        <p><a href="mailto: support@coinwealth.group">support@coinwealth.com</a></p>
                     </div>
                 </div>
             </div>
@@ -316,8 +325,6 @@ export default {
   font-family: 'Poppins', sans-serif;
   color: rgb(255, 255, 255);
 }
-
-
 
 
 
@@ -363,8 +370,8 @@ export default {
     font-weight: 600;
   }
 
-.container{
-    min-width: 100vw;
+.container-pri{
+    min-width: 99vw;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
@@ -372,7 +379,7 @@ export default {
 }
 
 .container2{
-    max-width: 1020px;
+    max-width: 1100px;
     margin-left: 50%;
     margin-right: -50%;
     transform: translateX(-50%);

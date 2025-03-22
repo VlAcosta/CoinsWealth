@@ -62,11 +62,11 @@
                     <div class="icon home-icon"></div>
                     <div class="ml-3">Admin Panel</div>
                 </router-link>
-                <router-link class="menu-item" to="/">
+                <router-link class="menu-item" to="/" v-if="!isLoggedIn">
                     <div class="icon home-icon"></div>
                     <div class="ml-3">Home</div>
                 </router-link>
-                <router-link class="menu-item" to="/profile">
+                <router-link class="menu-item" to="/profile" v-if="isLoggedIn">
                     <div class="icon home-icon"></div>
                     <div class="ml-3">Profile</div>
                 </router-link>

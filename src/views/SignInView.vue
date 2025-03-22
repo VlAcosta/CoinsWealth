@@ -17,6 +17,7 @@ export default {
       password: '',
       showPassword: false,
       validationMessage: '',
+      confirmEmail: false
     };
   },
   computed: {
@@ -39,9 +40,26 @@ export default {
         password: md5(this.password)
       }
       this.$store.dispatch('login', data)
-      .then(() => this.$router.push('/'))
+      .then(resp => {
+
+        if (resp.data.status == "user_not_find") {
+          alert("Invalid email or password")
+        } else if (resp.data.status == "email_not_confirm") {
+          this.confirmEmail = true;
+        }
+        else this.$router.push('/wallet/')
+      })
       .catch(err => console.log(err))
     }
+  },
+  beforeRouteEnter(to, from, next) {
+    // Используем функцию next с колбэком, который будет вызван после загрузки компонента
+    next((vm) => {
+      // Используем метод scrollTo для установки координат прокрутки страницы
+      vm.$nextTick(() => {
+        window.scrollTo(0, 0);
+      });
+    });
   },
 }
 </script>
@@ -76,6 +94,7 @@ export default {
         <button type="button" class="default-btn btn btn-secondary" v-on:click="sendData">
           <span>Sign in</span>
         </button>
+        <p v-if="confirmEmail" style="color: red; font-size: 12px; margin-top: 5px;">Account not confirmed</p>
         <p class="under-button-text">Don’t have an account? <router-link to="/sign-up">Sign up!</router-link></p>
       </div>
     </div>

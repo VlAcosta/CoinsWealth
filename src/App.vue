@@ -4,7 +4,20 @@ import store from './store/store.js'
 export default {
   created: function () {
     
-    
+  },
+  mounted() {
+    this.loadCrispChat();
+  },
+  methods: {
+    loadCrispChat() {
+      window.$crisp = [];
+      window.CRISP_WEBSITE_ID = "72a8a6b9-731d-4d69-aad8-919cef48f113"; // Ваш ID Crisp
+
+      const script = document.createElement('script');
+      script.src = "https://client.crisp.chat/l.js";
+      script.async = true;
+      document.head.appendChild(script);
+    }
   }
 }
 

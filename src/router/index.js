@@ -80,7 +80,7 @@ const routes = [
   },
   {
     path: '/wallet',
-    alias: ['/wallet/deposit', '/wallet/withdraw', '/wallet/history'],
+    alias: ['/wallet/deposit', '/wallet/withdraw', '/wallet/history', '/wallet/deposit/qr'],
     name: 'wallet',
     meta: {
       title: 'Wallet',
@@ -102,7 +102,7 @@ const routes = [
   },
   {
     path: '/admin',
-    alias: ['/admin/deposit','/admin/withdraw'],
+    alias: ['/admin/deposit','/admin/withdraw', '/admin/packages', '/admin/approval', '/admin/packages', '/admin/users', '/admin/report'],
     name: 'admin',
     meta: {
       title: 'Admins',

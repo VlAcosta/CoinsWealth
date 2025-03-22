@@ -2,6 +2,8 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import axios from 'axios'
 
+
+
 Vue.use(Vuex);
 
 //global.serverurl = 'http://localhost:5000'
@@ -33,7 +35,7 @@ export default new Vuex.Store({
   },
   getters : {
     isLoggedIn: state => !!state.token,
-    isAdmin: state => state.user.admin == 1,
+    isAdmin: state => state.user.admin > 0,
     authStatus: state => state.status,
   },
   actions: {
@@ -42,13 +44,26 @@ export default new Vuex.Store({
         commit('auth_request')
         axios({url: serverurl + '/api/signin', data: user, method: 'POST' })
         .then(resp => {
-          const token = resp.data.token
-          const user = resp.data.user
-          localStorage.setItem('token', token)
-          axios.defaults.headers.common['Authorization'] = token
-          commit('auth_success', { token: token, user: user })
-          console.log(token, user);
-          resolve(resp)
+          const status = resp.data.status;
+          switch (status) {
+            case "success":
+            {
+              const token = resp.data.token
+              const user = resp.data.user
+              localStorage.setItem('token', token)
+              axios.defaults.headers.common['Authorization'] = token
+              commit('auth_success', { token: token, user: user })
+              resolve(resp)
+              break;
+            }
+            case "user_not_find":
+            {
+              resolve(resp)
+              break;
+            }
+            default:
+              break;
+          }
         })
         .catch(err => {
           commit('auth_error')
@@ -62,12 +77,13 @@ export default new Vuex.Store({
         commit('auth_request')
         axios({url: serverurl + '/api/signup', data: user, method: 'POST' })
         .then(resp => {
-          const token = resp.data.token
-          const user = resp.data.user
-          localStorage.setItem('token', token)
-          axios.defaults.headers.common['Authorization'] = token
-          commit('auth_success', { token: token, user: user })
-          console.log(token, user);
+          if (resp.data.status != 'error') {
+            const token = resp.data.token
+            const user = resp.data.user
+            localStorage.setItem('token', token)
+            axios.defaults.headers.common['Authorization'] = token
+            commit('auth_success', { token: token, user: user })
+          }
           resolve(resp)
         })
         .catch(err => {
@@ -95,11 +111,9 @@ export default new Vuex.Store({
               {
                 const token = resp.data.token
                 const user = resp.data.user
-                console.log(resp.data.user.admin);
                 localStorage.setItem('token', token)
                 axios.defaults.headers.common['Authorization'] = token
                 commit('auth_success', { token: token, user: user })
-                console.log('success load data user', resp.data.user);
               }
               break;
           
@@ -197,6 +211,223 @@ export default new Vuex.Store({
           
         })
       })
-    }
+    },
+    load_wallet_history({commit}, data){
+      return new Promise((resolve, reject) => {
+        axios({url: serverurl + '/api/load_wallet_history', data: data, method: 'POST' })
+        .then(resp => {
+          resolve(resp)
+          
+        })
+        .catch(err => {
+          
+        })
+      })
+    },
+    load_admin_withdraw({commit}, data){
+      return new Promise((resolve, reject) => {
+        axios({url: serverurl + '/api/load_admin_withdraw', data: data, method: 'POST' })
+        .then(resp => {
+          resolve(resp)
+          
+        })
+        .catch(err => {
+          
+        })
+      })
+    },
+    edit_admin_withdraw({commit}, data){
+      return new Promise((resolve, reject) => {
+        axios({url: serverurl + '/api/edit_admin_withdraw', data: data, method: 'POST' })
+        .then(resp => {
+          resolve(resp)
+          
+        })
+        .catch(err => {
+          
+        })
+      })
+    },
+    forgot_password({commit}, data){
+      return new Promise((resolve, reject) => {
+        axios({url: serverurl + '/api/forgot_password', data: data, method: 'POST' })
+        .then(resp => {
+          resolve(resp)
+          
+        })
+        .catch(err => {
+          
+        })
+      })
+    },
+    check_link_resetpass({commit}, data){
+      return new Promise((resolve, reject) => {
+        axios({url: serverurl + '/api/check_link_resetpass', data: data, method: 'POST' })
+        .then(resp => {
+          resolve(resp)
+          
+        })
+        .catch(err => {
+          
+        })
+      })
+    },
+    reset_password({commit}, data){
+      return new Promise((resolve, reject) => {
+        axios({url: serverurl + '/api/reset_password', data: data, method: 'POST' })
+        .then(resp => {
+          resolve(resp)
+          
+        })
+        .catch(err => {
+          
+        })
+      })
+    },
+    load_admins_list({commit}, data){
+      return new Promise((resolve, reject) => {
+        axios({url: serverurl + '/api/load_admins_list', data: data, method: 'POST' })
+        .then(resp => {
+          resolve(resp)
+          
+        })
+        .catch(err => {
+          
+        })
+      })
+    },
+    load_admin_packages({commit}, data){
+      return new Promise((resolve, reject) => {
+        axios({url: serverurl + '/api/load_admin_packages', data: data, method: 'POST' })
+        .then(resp => {
+          resolve(resp)
+          
+        })
+        .catch(err => {
+          
+        })
+      })
+    },
+    save_admin_packages({commit}, data){
+      return new Promise((resolve, reject) => {
+        axios({url: serverurl + '/api/save_admin_packages', data: data, method: 'POST' })
+        .then(resp => {
+          resolve(resp)
+          
+        })
+        .catch(err => {
+          
+        })
+      })
+    },
+    load_user_packages({commit}, data){
+      return new Promise((resolve, reject) => {
+        axios({url: serverurl + '/api/load_user_packages', data: data, method: 'POST' })
+        .then(resp => {
+          resolve(resp)
+          
+        })
+        .catch(err => {
+          
+        })
+      })
+    },
+    load_admin_report({commit}, data){
+      return new Promise((resolve, reject) => {
+        axios({url: serverurl + '/api/load_admin_report', data: data, method: 'POST' })
+        .then(resp => {
+          resolve(resp)
+          
+        })
+        .catch(err => {
+          
+        })
+      })
+    },
+    load_wallet_packages({commit}, data){
+      return new Promise((resolve, reject) => {
+        axios({url: serverurl + '/api/load_wallet_packages', data: data, method: 'POST' })
+        .then(resp => {
+          resolve(resp)
+          
+        })
+        .catch(err => {
+          
+        })
+      })
+    },
+    edit_admin_role({commit}, data){
+      return new Promise((resolve, reject) => {
+        axios({url: serverurl + '/api/edit_admin_role', data: data, method: 'POST' })
+        .then(resp => {
+          resolve(resp)
+          
+        })
+        .catch(err => {
+          
+        })
+      })
+    },
+    confirm_account({commit}, data){
+      return new Promise((resolve, reject) => {
+        axios({url: serverurl + '/api/confirm_account', data: data, method: 'POST' })
+        .then(resp => {
+          resolve(resp)
+          
+        })
+        .catch(err => {
+          
+        })
+      })
+    },
+    load_admin_approval({commit}, data){
+      return new Promise((resolve, reject) => {
+        axios({url: serverurl + '/api/load_admin_approval', data: data, method: 'POST' })
+        .then(resp => {
+          resolve(resp)
+          
+        })
+        .catch(err => {
+          
+        })
+      })
+    },
+    create_approval({commit}, data){
+      return new Promise((resolve, reject) => {
+        axios({url: serverurl + '/api/create_approval', data: data, method: 'POST' })
+        .then(resp => {
+          resolve(resp)
+          
+        })
+        .catch(err => {
+          
+        })
+      })
+    },
+
+    approve_deposit({commit}, data){
+      return new Promise((resolve, reject) => {
+        axios({url: serverurl + '/api/approve_deposit', data: data, method: 'POST' })
+        .then(resp => {
+          resolve(resp)
+          
+        })
+        .catch(err => {
+          
+        })
+      })
+    },
+    reject_deposit({ commit }, data) {
+      return new Promise((resolve, reject) => {
+        axios({url: serverurl + '/api/reject_deposit', data: data, method: 'POST' })
+        .then(resp => {
+          resolve(resp)
+          
+        })
+        .catch(err => {
+          
+        })
+      })
+    },
   }
 });

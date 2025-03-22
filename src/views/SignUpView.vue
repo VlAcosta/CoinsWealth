@@ -68,11 +68,22 @@ export default {
           password: md5(this.password)
         }
         this.$store.dispatch('register', data)
-       .then(() => this.$router.push('/'))
+        .then(resp => {
+          if (resp.data.status == 'user_exist') {
+            return alert("This email has already been registered")
+          } else if (resp.data.status == 'success') this.$router.push('/well-done')
+        })
        .catch(err => console.log(err))
     }
-
-
+  },
+  beforeRouteEnter(to, from, next) {
+    // Используем функцию next с колбэком, который будет вызван после загрузки компонента
+    next((vm) => {
+      // Используем метод scrollTo для установки координат прокрутки страницы
+      vm.$nextTick(() => {
+        window.scrollTo(0, 0);
+      });
+    });
   },
 }
 </script>

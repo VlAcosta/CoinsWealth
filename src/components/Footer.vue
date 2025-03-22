@@ -1,14 +1,6 @@
 <script>
 export default {
-    methods: { 
-        scrollToTop() {
-            window.scroll({
-                top: 0,
-                left: 0,
-                behavior: 'instant'
-            })
-        }
-}
+
 
 }
 </script>
@@ -18,16 +10,16 @@ export default {
         <div class="mb-3-osn">
             <div class="mb-3">
                 <span class="name_g">Quick links</span>
-                <span class="name_v_g"><router-link @click.native="scrollToTop" to="/">Home</router-link></span>
-                <span class="name_v_g"><router-link @click.native="scrollToTop" to="/about">About</router-link></span>
-                <span class="name_v_g"><router-link @click.native="scrollToTop" to="/faq">FAQ</router-link></span>
-                <span class="name_v_g"><router-link @click.native="scrollToTop" to="/referral-program">Referral Program</router-link></span>
+                <span class="name_v_g"><router-link to="/">Home</router-link></span>
+                <span class="name_v_g"><router-link to="/about">About</router-link></span>
+                <span class="name_v_g"><router-link to="/faq">FAQ</router-link></span>
+                <span class="name_v_g"><router-link to="/referral-program">Referral Program</router-link></span>
             </div>
             <div class="mb-3">
                 <span class="name_g">Legals</span>
-                <span class="name_v_g"><router-link @click.native="scrollToTop" to="/">Privacy Policy</router-link></span>
-                <span class="name_v_g"><router-link @click.native="scrollToTop" to="/terms">Terms of Service</router-link></span>
-                <span class="name_v_g"><router-link @click.native="scrollToTop" to="">Disclaimer</router-link></span>
+                <span class="name_v_g"><router-link to="/privacy">Privacy Policy</router-link></span>
+                <span class="name_v_g"><router-link to="/terms">Terms of Service</router-link></span>
+                <span class="name_v_g"><router-link to="/disclaimer">Disclaimer</router-link></span>
             </div>
             <div class="mb-3" id="mb-3">
                 <span class="name_g">Contact us</span>
@@ -37,12 +29,12 @@ export default {
                 </div>
                 <div class="em_block">
                     <img class="lg" id="email" src="../assets/emai.svg">
-                    <span class="name_v_g"><a href="support@coinwealth.group"></a></span>
+                    <span class="name_v_g"><a href="support@coinwealth.group">support@coinwealth.group</a></span>
                 </div>
             </div>
         </div>
         <div class="block_rights">
-            <span id="rights">coinwealth © 2023 All rights reserved</span>
+            <span id="rights">coinwealth © {{new Date().getFullYear()}} All rights reserved</span>
         </div>
     </footer>
 </template>
@@ -60,26 +52,24 @@ footer{
     display: flex;
     justify-content: space-between;
     flex-direction: row;
-    max-width: 1300px;
+    max-width: 1090px;
     margin-left: 50%;
     margin-right: -50%;
-    padding-left: 10%;
     transform: translateX(-50%);
     border-bottom: 2px solid #4F5364;
     height: 100%;
     padding-bottom: 10px;
 }
 .mb-3{
-    width: 380px;
+    width: 400px;
     display: flex;
     text-align: left;
     flex-direction: column;
     justify-content: space-between;
-
 }
 #mb-3{
-    width: 363px;
-    justify-content: flex-start;
+    width: 380px;
+    justify-content: right;
 }
 .name_g{
     color: #F8F8F8;
@@ -139,12 +129,6 @@ footer{
     padding-top: 12px;
 }
 
-hr{
-    border-top: 1px solid #4F5364;
-    margin: 0;
-    margin-left: 13%;
-    margin-right: 120px;
-}
 
 a {
     cursor: pointer;
@@ -152,11 +136,6 @@ a {
     color: #AEB1C5;
 }
 
-@media screen and (max-width: 766px){
-        .mb-3-osn{
-        flex-direction: column;
-    }
-}
 
 @media screen and (max-width: 700px)  {
     .name_g{
@@ -178,7 +157,9 @@ a {
         line-height: 20px; 
 
     }
-
+    .mb-3-osn{
+        flex-direction: row;
+    }
 }
 
 

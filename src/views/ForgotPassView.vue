@@ -5,35 +5,61 @@ import Footer from '@/components/Footer.vue'
 
 
 export default {
-  name: 'SignInVue',
+  name: 'ForgotPassVue',
   components: {
     Header,
     Footer
   },
   data() {
     return {
-      password: '',
-      showPassword: false,
-      validationMessage: '',
-      acceptTerms: false,      
-      subscribeEmails: false,      
+      email: '',
+
+      err_email: false,
+      msg_email: '',    
     };
   },
   computed: {
-    inputType() {
-      return this.showPassword ? 'text' : 'password';
-    },
     isButtonActive() {
-      return this.acceptTerms && this.subscribeEmails;
+      return this.email.length >= 8 && !this.err_email;
     },
   },
   methods: {
-    togglePasswordVisibility() {
-      this.showPassword = !this.showPassword;
+    validateEmail() {
+      var emailRegex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      if (this.email.match(emailRegex)) {
+        this.err_email = false;
+        this.errorMsg_email = ''
+      } else {
+        this.err_email = true;
+        this.msg_email = 'Please enter a valid email'
+      }
     },
-    validatePassword() {
-      this.validationMessage = this.password.length < 8 ? 'Password must be at least 8 characters long' : '';
-    },
+    BtnClick() {
+      let data = {
+        email: this.email
+      }
+
+      this.$store.dispatch('forgot_password', data)
+      .then(resp => {
+        switch (resp.data.status) {
+          case "success":
+          {
+            alert('If this email is registered, you will receive an email with a link to restore your password. The email could have ended up in the spam folder!')
+            //this.$router.push('/sign-in')
+            break;
+          }
+        }
+      })
+       .catch(err => console.log(err))
+    }
+  },
+  beforeRouteEnter(to, from, next) {
+    next((vm) => {
+      
+      vm.$nextTick(() => {
+        window.scrollTo(0, 0);
+      });
+    });
   },
 }
 </script>
@@ -48,11 +74,11 @@ export default {
         <form autocomplete="off" class="form w-100">
             <div xs="12" class="mb-4 form-group">
                 <label for="email" class="">Email</label>
-                <input id="email" name="email" placeholder="Type here your email" type="email" class="form-control" aria-invalid="false" value="">
-                <div class="invalid-feedback"></div>
+                <input id="email" name="email" placeholder="Type here your email" type="email" class="form-control" :class="this.err_email ? 'input_error' : ''" v-on:input="validateEmail()" v-model="email">
+                <label v-if="this.err_email"  for="email" class="invalid_message">{{ this.msg_email }}</label>
             </div>
         </form>
-        <button type="button" class="default-btn w-50  btn btn-secondary" :disabled="!isButtonActive">
+        <button type="button" class="default-btn w-50  btn btn-secondary" :disabled="!isButtonActive" @click="BtnClick()">
           <span>Get link</span>
         </button>
       </div>
@@ -131,6 +157,11 @@ label {
 .main-container-authorize .form-group .form-control:hover {
   border: 1px solid rgb(185, 247, 0);
 }
+
+.main-container-authorize .form-group .form-control:focus {
+  border: 1px solid rgb(255, 255, 255);
+  box-shadow: none;
+}
 .main-container-authorize .form-group .form-control {
   display: flex;
   height: 46px;
@@ -147,6 +178,16 @@ label {
   font-weight: 400;
   line-height: normal; 
 
+}
+
+.invalid_message{
+  color: red !important;
+  font-family: 'Poppins', sans-serif;
+  font-size: 12px;
+}
+
+.input_error {
+  border: 1px solid red !important;
 }
 
 ::placeholder {
